@@ -1,0 +1,35 @@
+﻿# Virtual environment
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+.env.*
+
+# W&B local files
+.wandb/
+wandb/
+
+# Artifacts (large files — version with DVC later)
+artifacts/
+*.pkl
+*.pt
+*.pth
+*.onnx
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/settings.json
