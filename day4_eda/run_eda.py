@@ -15,7 +15,7 @@ os.makedirs("figures", exist_ok=True)
 os.makedirs("docs", exist_ok=True)
 
 INPUT_DATA = "data/titanic.csv"
-PROFILE_HTML = "docs/titanic_profile.html"
+PROFILE_HTML = "docs/titanic_profile_full.html"
 INDEX_HTML = "docs/index.html"
 FIG_DIR = "figures"
 
@@ -23,8 +23,7 @@ FIG_DIR = "figures"
 df = pd.read_csv(INPUT_DATA)
 df.columns = df.columns.str.lower()
 
-print(f"📋 Dataset loaded successfully from {INPUT_DATA}. Shape: {df.shape}")
-print(f"📌 Available attributes: {df.columns.tolist()}")
+print(f"📊 Dataset loaded successfully. Shape: {df.shape}")
 
 def find_target_col(possibilities, default):
     for p in possibilities:
@@ -43,9 +42,23 @@ if 'familysize' not in df.columns:
     par = df['parch'] if 'parch' in df.columns else 0
     df['familysize'] = sib + par + 1
 
-# 1. Profile Report
-print("⚡ Generating interactive profiling report...")
-profile = ProfileReport(df, title="Titanic Dataset Report", minimal=True, progress_bar=False)
+# 1. Advanced Profile Report with Pearson & Spearman Configurations
+print("⚡ Computing deep-dive correlation profiling report (Pearson & Spearman)...")
+profile = ProfileReport(
+    df,
+    title="Titanic EDA — Full Correlation Report",
+    minimal=False,
+    correlations={
+        "pearson":  {"calculate": True},
+        "spearman": {"calculate": True},
+        "kendall":  {"calculate": False},
+        "phi_k":    {"calculate": False},
+        "cramers":  {"calculate": False},
+    },
+    missing_diagrams={"bar": True, "matrix": True, "heatmap": False},
+    explorative=True,
+    progress_bar=False,
+)
 profile.to_file(PROFILE_HTML)
 
 # 2. Hypothesis Testing
@@ -113,8 +126,8 @@ html = f"""<!DOCTYPE html>
 </head>
 <body>
     <h1>📊 Day 4 — Titanic Statistics & EDA Portfolio</h1>
-    <p>Automated summary report tracking statistical validation matrices and visual feature breakdowns.</p>
-    <a href="titanic_profile.html" class="btn">Launch Interactive Report Profile →</a>
+    <p>Automated summary report tracking statistical validation matrices and multi-correlation breakdowns.</p>
+    <a href="titanic_profile_full.html" class="btn">🚀 Launch Advanced Correlation Profile Report →</a>
     <h2>🔬 Statistical Testing Engine Summary (1st vs 3rd Class)</h2>
     <div class="metric-box">
         <strong>Welch's t-test p-value:</strong> {p_val:.4e}<br>
@@ -141,4 +154,4 @@ html = f"""<!DOCTYPE html>
 with open(INDEX_HTML, "w", encoding="utf-8") as out:
     out.write(html)
 
-print("\n✅ Project complete! All assets compiled smoothly.")
+print("\n✅ Project complete! Advanced multi-correlation assets compiled successfully.")
