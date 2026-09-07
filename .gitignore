@@ -33,3 +33,8 @@ build/
 
 # VS Code
 .vscode/settings.json
+
+# --- Day 5 Data Exclusions ---
+day5_duckdb/data/*.parquet
+day5_duckdb/*.duckdb
+*.duckdb
